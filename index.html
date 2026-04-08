@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>API StarWars</title>
+    <link rel="stylesheet" href="./style.css">
+</head>
+
+<body>
+    <header>
+        <h1><span class="destaque">StarWars</span></h1>
+    </header>
+    <main>
+        <section>
+            <h2>Personagens</h2>
+            <div class="cards-container" id="cardsContainer"></div>
+        </section>
+    </main>
+    <footer>
+        <p>Desenvolvido em WEBIII por Carol - 3ºA</p>
+    </footer>
+
+    <script>
+        async function carregarPersonagens() {
+            const container = document.getElementById('cardsContainer')
+            container.innerHTML = "<p>Carregando...</p>"
+
+            try {
+                const resposta = await fetch("https://akabab.github.io/starwars-api/api/all.json")
+                const personagens = await resposta.json()
+
+                container.innerHTML = ""
+
+                personagens.forEach(personagem => {
+                    const card = document.createElement("div")
+                    card.classList.add("card")
+
+                    card.innerHTML = `
+                    <img src="${personagem.image}">
+
+                    <div class="card-content">
+                        <h3>Nome do personagem ${personagem.name}</h3>    
+                        <p><strong>Espécie:</strong> ${personagem.species || "Desconhecida"}</p>
+                        <p><strong>Gênero:</strong> ${personagem.gender || "Desconhecido"}</p>
+                        <p><strong>Altura:</strong> ${personagem.height || "Desconhecida"}</p>
+                        <p><strong>Mundo:</strong> ${personagem.homeworld || "Desconhecido"}</p>
+                    </div>
+                  `
+
+                  container.appendChild(card)
+                })
+            }
+
+            catch (erro) {
+                container.innerHTML = "<p>Não foi possível acessar os dados dos personagens</p>"
+                console.error(erro)
+            }
+        }
+
+        document.addEventListener("DOMContentLoaded", ()=>{
+            carregarPersonagens()
+        })
+    </script>
+</body>
+
+</html>
